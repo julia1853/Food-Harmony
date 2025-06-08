@@ -1,0 +1,246 @@
+/* Базовые стили */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  color: #ffffff;
+}
+
+body {
+  background-image: url('images/broccoli.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Полупрозрачный фон для контента */
+.content {
+  text-align: center;
+  background-color: rgba(46, 125, 50, 0.7); /* Тёмно-зелёный с прозрачностью */
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 500px;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+/* Кнопка перехода на другую страницу */
+.fancy-button {
+  display: inline-block;
+  padding: 15px 30px;
+  background-color: #8bc34a;
+  color: white;
+  font-size: 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.fancy-button:hover {
+  background-color: #7cb342;
+  transform: scale(1.05);
+}
+
+/* Выпадающие списки */
+.product-selectors {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: center;
+  width: 100%;
+}
+
+.product {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.product:hover {
+  border-color: #4caf50;
+}
+
+/* Кнопка проверки сочетания */
+button {
+  padding: 12px 25px;
+  font-size: 16px;
+  background-color: #ffd700;
+  color: #2e7d32;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 300px;
+  margin: 20px auto;
+}
+
+button:hover {
+  background-color: #ffed4a;
+  transform: scale(1.05);
+}
+
+/* Результат проверки */
+#result {
+  font-size: 20px;
+  margin-top: 20px;
+  font-weight: bold;
+  color: #e8f5e9;
+  width: 100%;
+  max-width: 300px;
+  margin: 20px auto;
+}
+
+/* Подсветка плохих сочетаний */
+.bad-combo {
+  border-color: #ef5350 !important;
+  background-color: #ffebee !important;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.doubtful-combo {
+  border-color: #ffa726 !important;
+  background-color: #fff8e1 !important;
+}
+
+.good-combo {
+  border-color: #66bb6a !important;
+  background-color: #e8f5e9 !important;
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* Сообщения о результате */
+.warning {
+  color: #c62828;
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.doubtful {
+  color: #ef6c00;
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.success {
+  color: #2e7d32;
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.neutral {
+  color: #757575;
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.nutrition {
+  margin-top: 15px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 480px) {
+  .content {
+    padding: 20px;
+    width: 95%;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .product {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+
+  #result {
+    font-size: 16px;
+  }
+
+  .warning, .doubtful, .success, .neutral {
+    font-size: 16px;
+  }
+
+  .nutrition {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  .content {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .product {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  button {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+
+  #result {
+    font-size: 14px;
+  }
+
+  .warning, .doubtful, .success, .neutral {
+    font-size: 14px;
+  }
+
+  .nutrition {
+    font-size: 12px;
+  }
+}

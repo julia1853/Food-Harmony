@@ -1,0 +1,15 @@
+{
+  "name": "food-harmony",
+  "version": "1.0.0",
+  "description": "Food Harmony - приложение для проверки сочетаемости продуктов",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 3000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@sentry/browser": "^7.0.0"
+  },
+  "author": "",
+  "license": "ISC"
+} 

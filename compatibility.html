@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Проверка сочетаемости продуктов | Food Harmony</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Локальный мониторинг безопасности
+    const securityMonitor = {
+      logs: [],
+      maxLogs: 1000,
+
+      init() {
+        try {
+          this.trackDevTools();
+          this.trackConsoleAccess();
+          this.trackNetworkRequests();
+          this.trackUserActivity();
+          this.trackPerformance();
+          this.setupErrorHandling();
+          this.setupLocalStorage();
+        } catch (error) {
+          console.error('Ошибка инициализации мониторинга:', error);
+        }
+      },
+
+      setupLocalStorage() {
+        // Очищаем старые логи при запуске
+        localStorage.setItem('securityLogs', JSON.stringify([]));
+      },
+
+      trackDevTools() {
+        let devtools = function() {};
+        devtools.toString = function() {
+          this.opened = true;
+          return '';
+        }
+        console.log('%c', devtools);
+        setInterval(() => {
+          if (devtools.opened) {
+            this.reportSuspiciousActivity('DevTools открыты', 'high');
+          }
+        }, 1000);
+      },
+
+      trackConsoleAccess() {
+        const originalConsole = window.console;
+        window.console = new Proxy(originalConsole, {
+          get: (target, property) => {
+            if (property === 'log' || property === 'warn' || property === 'error') {
+              this.reportSuspiciousActivity(`Попытка использования console.${property}`, 'medium');
+            }
+            return target[property];
+          }
+        });
+      },
+
+      trackNetworkRequests() {
+        const originalFetch = window.fetch;
+        window.fetch = async (...args) => {
+          try {
+            this.reportSuspiciousActivity(`Сетевой запрос: ${args[0]}`, 'low');
+            return await originalFetch.apply(this, args);
+          } catch (error) {
+            this.reportSuspiciousActivity(`Ошибка сетевого запроса: ${error.message}`, 'high');
+            throw error;
+          }
+        };
+      },
+
+      trackUserActivity() {
+        let lastActivity = Date.now();
+        const timeout = 30 * 60 * 1000; // 30 минут
+
+        const resetTimer = () => {
+          lastActivity = Date.now();
+        };
+
+        ['click', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
+          document.addEventListener(event, resetTimer);
+        });
+
+        setInterval(() => {
+          if (Date.now() - lastActivity > timeout) {
+            this.reportSuspiciousActivity('Длительное отсутствие активности', 'low');
+          }
+        }, 60000);
+      },
+
+      trackPerformance() {
+        if ('performance' in window) {
+          const observer = new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+              if (entry.duration > 1000) { // Если операция заняла больше 1 секунды
+                this.reportSuspiciousActivity(`Медленная операция: ${entry.name}`, 'medium');
+              }
+            }
+          });
+          observer.observe({ entryTypes: ['measure', 'resource'] });
+        }
+      },
+
+      setupErrorHandling() {
+        window.onerror = (msg, url, line, col, error) => {
+          this.reportSuspiciousActivity(`Ошибка: ${msg}`, 'high');
+          return false;
+        };
+
+        window.addEventListener('unhandledrejection', (event) => {
+          this.reportSuspiciousActivity(`Необработанное отклонение промиса: ${event.reason}`, 'high');
+        });
+      },
+
+      reportSuspiciousActivity(activity, severity) {
+        try {
+          const logEntry = {
+            timestamp: new Date().toISOString(),
+            activity,
+            severity,
+            userAgent: navigator.userAgent,
+            url: window.location.href
+          };
+
+          // Добавляем запись в локальное хранилище
+          const logs = JSON.parse(localStorage.getItem('securityLogs') || '[]');
+          logs.push(logEntry);
+          
+          // Ограничиваем количество хранимых логов
+          if (logs.length > this.maxLogs) {
+            logs.shift();
+          }
+          
+          localStorage.setItem('securityLogs', JSON.stringify(logs));
+
+          // Локальное логирование
+          console.warn(`[${severity.toUpperCase()}] ${activity}`);
+
+          // Если это критическая ошибка, показываем уведомление
+          if (severity === 'high') {
+            this.showNotification(activity);
+          }
+        } catch (error) {
+          console.error('Ошибка записи лога:', error);
+        }
+      },
+
+      showNotification(message) {
+        // Создаем элемент уведомления
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background-color: #ff4444;
+          color: white;
+          padding: 15px;
+          border-radius: 5px;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+          z-index: 1000;
+          max-width: 300px;
+        `;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        // Удаляем уведомление через 5 секунд
+        setTimeout(() => {
+          notification.remove();
+        }, 5000);
+      },
+
+      getLogs() {
+        return JSON.parse(localStorage.getItem('securityLogs') || '[]');
+      },
+
+      clearLogs() {
+        localStorage.setItem('securityLogs', JSON.stringify([]));
+      }
+    };
+
+    // Инициализация мониторинга
+    securityMonitor.init();
+
+    // Базовая защита от копирования
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'u' || e.key === 'U')) {
+        e.preventDefault();
+      }
+    });
+  </script>
+</head>
+<body>
+
+  <div class="content">
+    <h1>Смешай еду 🥗 + 🍔</h1>
+    <p>Выберите продукты из списка:</p>
+
+    <div class="product-selectors" id="productSelectors"></div>
+
+    <br>
+    <button onclick="checkCompatibility()">Проверить сочетание</button>
+    <div id="result"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
