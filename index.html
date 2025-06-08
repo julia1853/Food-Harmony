@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Food Harmony</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="./manifest.json">
+  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#4CAF50">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Food Harmony">
-  <link rel="apple-touch-icon" href="./images/icon-192x192.png">
+  <link rel="apple-touch-icon" href="images/icon-192x192.png">
   <script>
     // Локальный мониторинг безопасности
     const securityMonitor = {
@@ -204,16 +204,14 @@
     <p>Выберите продукты — и узнайте, сочетаются ли они!</p>
 
     <!-- Кнопка перехода -->
-    <a href="compatibility.html">
-      <div class="fancy-button">Смешай еду 🥗 + 🍔</div>
-    </a>
+    <a href="compatibility.html" class="fancy-button">Смешай еду 🥗 + 🍔</a>
   </div>
 
   <script>
     // Регистрация сервис-воркера
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
+        navigator.serviceWorker.register('sw.js')
           .then(registration => {
             console.log('ServiceWorker registration successful');
           })
