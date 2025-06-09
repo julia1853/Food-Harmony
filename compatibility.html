@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Проверка сочетаемости продуктов | Food Harmony</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4CAF50">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Food Harmony">
+  <link rel="apple-touch-icon" href="images/icon-192x192.png">
   <script>
     // Локальный мониторинг безопасности
     const securityMonitor = {
@@ -201,18 +207,28 @@
     <div class="product-selectors" id="productSelectors"></div>
 
     <br>
-    <button type="button" id="mixButton">Проверить сочетание</button>
+    <button type="button" id="mixButton" onclick="checkCompatibility()">Проверить сочетание</button>
     <div id="result"></div>
   </div>
 
   <script src="script.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const mixButton = document.getElementById('mixButton');
-      if (mixButton) {
-        mixButton.addEventListener('click', checkCompatibility);
-      }
-    });
+    // Проверка загрузки script.js
+    if (typeof checkCompatibility === 'undefined') {
+      console.error('script.js не загружен или функция checkCompatibility не определена');
+    } else {
+      console.log('script.js успешно загружен');
+    }
+    // Регистрация сервис-воркера
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(registration => {
+          console.log('ServiceWorker registration successful');
+        })
+        .catch(error => {
+          console.error('ServiceWorker registration failed:', error);
+        });
+    }
   </script>
 </body>
 </html>
