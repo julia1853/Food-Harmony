@@ -1,13 +1,13 @@
 const CACHE_NAME = 'foodharmony-v1';
 const urlsToCache = [
   './',
-  './index.html',
-  './compatibility.html',
-  './style.css',
-  './script.js',
-  './manifest.json',
-  './images/icon-192x192.png',
-  './images/icon-512x512.png'
+  'index.html',
+  'compatibility.html',
+  'style.css',
+  'script.js',
+  'manifest.json',
+  'images/icon-192x192.png',
+  'images/icon-512x512.png'
 ];
 
 self.addEventListener('install', event => {
