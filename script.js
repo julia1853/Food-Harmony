@@ -11,7 +11,7 @@ const productGroups = {
   condiment: "Соусы и приправы"
 };
 
-// Продукты, разделённые по группам
+// Продукты по группам
 const groupedProducts = {
   carbs: [
     { value: "bread", name: "Хлеб" },
@@ -76,7 +76,7 @@ const groupedProducts = {
 // Единый список всех продуктов
 const products = Object.values(groupedProducts).flat();
 
-// Маппинг: продукт -> группа
+// Маппинг продукт → группа
 const productToGroup = {};
 Object.keys(groupedProducts).forEach(groupKey => {
   groupedProducts[groupKey].forEach(product => {
@@ -84,7 +84,7 @@ Object.keys(groupedProducts).forEach(groupKey => {
   });
 });
 
-// Несовместимые пары (❌ плохие сочетания)
+// Несовместимые пары
 const badCombos = [
   ["cheese", "sausage"],
   ["eggs", "cucumber"],
@@ -99,7 +99,7 @@ const badCombos = [
   ["sour_cream", "canned_tuna"]
 ];
 
-// Сомнительные пары (⚠️ неоднозначные)
+// Сомнительные пары
 const doubtfulCombos = [
   ["banana", "chicken"],
   ["apple", "ham"],
@@ -109,7 +109,7 @@ const doubtfulCombos = [
   ["avocado", "jam"]
 ];
 
-// Хорошие пары (✅ отличные сочетания)
+// Хорошие пары
 const goodCombos = [
   ["watermelon", "feta"],
   ["pineapple", "ham"],
@@ -122,7 +122,7 @@ const badGroupCombos = [
   ["fish", "dairy"] // Рыба + молочные продукты — ❌ не сочетаются
 ];
 
-// Какие группы хорошо сочетаются между собой
+// Хорошие группы
 const goodGroupCombos = [
   ["carbs", "dairy"],
   ["carbs", "meat"],
@@ -149,30 +149,6 @@ const goodGroupCombos = [
   ["condiment", "vegetable"]
 ];
 
-// Генерируем выпадающие списки при загрузке страницы
-window.onload = () => {
-  const container = document.getElementById("productSelectors");
-
-  for (let i = 0; i < 3; i++) {
-    const select = document.createElement("select");
-    select.classList.add("product");
-
-    const defaultOption = document.createElement("option");
-    defaultOption.value = "";
-    defaultOption.textContent = "-- Выберите продукт --";
-    select.appendChild(defaultOption);
-
-    products.forEach(product => {
-      const option = document.createElement("option");
-      option.value = product.value;
-      option.textContent = product.name;
-      select.appendChild(option);
-    });
-
-    container.appendChild(select);
-  }
-};
-
 // Функция проверки сочетания
 function checkCompatibility() {
   const selects = document.querySelectorAll(".product");
@@ -191,6 +167,11 @@ function checkCompatibility() {
   });
 
   const resultDiv = document.getElementById("result");
+  if (!resultDiv) {
+    console.error('Элемент result не найден');
+    return;
+  }
+  
   resultDiv.innerHTML = "";
 
   if (selectedProducts.length < 2) {
@@ -208,54 +189,46 @@ function checkCompatibility() {
       const a = selectedProducts[i].value;
       const b = selectedProducts[j].value;
 
-      // 1. Проверяем явные хорошие пары
+      // 1. Явно хорошие пары
       if (
         goodCombos.some(combo =>
-          (combo[0] === a && combo[1] === b) ||
-          (combo[0] === b && combo[1] === a)
+          combo[0] === a && combo[1] === b || combo[0] === b && combo[1] === a
         )
       ) {
         goodPairs.push([selectedProducts[i], selectedProducts[j]]);
       }
-      // 2. Проверяем явные плохие пары
+      // 2. Явно плохие пары
       else if (
         badCombos.some(combo =>
-          (combo[0] === a && combo[1] === b) ||
-          (combo[0] === b && combo[1] === a)
+          combo[0] === a && combo[1] === b || combo[0] === b && combo[1] === a
         )
       ) {
         badPairs.push([selectedProducts[i], selectedProducts[j]]);
       }
-      // 3. Проверяем сомнительные пары
+      // 3. Сомнительные пары
       else if (
         doubtfulCombos.some(combo =>
-          (combo[0] === a && combo[1] === b) ||
-          (combo[0] === b && combo[1] === a)
+          combo[0] === a && combo[1] === b || combo[0] === b && combo[1] === a
         )
       ) {
         doubtfulPairs.push([selectedProducts[i], selectedProducts[j]]);
       }
-      // 4. Проверяем по группам
+      // 4. Проверка по группам
       else {
         const groupA = productToGroup[a] || "other";
         const groupB = productToGroup[b] || "other";
 
-        // Проверяем плохие сочетания групп
         if (
           badGroupCombos.some(
-            (combo) =>
-              (combo[0] === groupA && combo[1] === groupB) ||
-              (combo[0] === groupB && combo[1] === groupA)
+            combo => combo[0] === groupA && combo[1] === groupB ||
+                   combo[0] === groupB && combo[1] === groupA
           )
         ) {
           badPairs.push([selectedProducts[i], selectedProducts[j]]);
-        }
-        // Проверяем хорошие сочетания групп
-        else if (
+        } else if (
           goodGroupCombos.some(
-            (combo) =>
-              (combo[0] === groupA && combo[1] === groupB) ||
-              (combo[0] === groupB && combo[1] === groupA)
+            combo => combo[0] === groupA && combo[1] === groupB ||
+                   combo[0] === groupB && combo[1] === groupA
           )
         ) {
           goodPairs.push([selectedProducts[i], selectedProducts[j]]);
@@ -264,7 +237,7 @@ function checkCompatibility() {
     }
   }
 
-  // Подсветка продуктов и вывод результата
+  // Подсветка и результат
   if (badPairs.length > 0) {
     badPairs.flat().forEach(item => {
       item.element.classList.add("bad-combo");
@@ -284,7 +257,7 @@ function checkCompatibility() {
     resultDiv.innerHTML += `<div class="neutral">🍴 Нейтральное сочетание</div>`;
   }
 
-  // БЖУ
+  // Данные по калориям и БЖУ
   const calories = {
     bread: 265, cheese: 402, sausage: 322, eggs: 155, tomato: 18,
     cucumber: 15, milk: 54, butter: 717, yogurt: 59, sour_cream: 214,
@@ -359,3 +332,31 @@ function checkCompatibility() {
     </div>
   `;
 }
+
+// Генерируем выпадающие списки при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById("productSelectors");
+  if (!container) return;
+
+  for (let i = 0; i < 3; i++) {
+    const select = document.createElement("select");
+    select.classList.add("product");
+
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "-- Выберите продукт --";
+    select.appendChild(defaultOption);
+
+    products.forEach(product => {
+      const option = document.createElement("option");
+      option.value = product.value;
+      option.textContent = product.name;
+      select.appendChild(option);
+    });
+
+    container.appendChild(select);
+  }
+});
+
+// Экспортируем функцию для использования в других файлах
+window.checkCompatibility = checkCompatibility;
