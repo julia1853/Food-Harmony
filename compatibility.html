@@ -212,23 +212,5 @@
   </div>
 
   <script src="script.js"></script>
-  <script>
-    // Проверка загрузки script.js
-    if (typeof checkCompatibility === 'undefined') {
-      console.error('script.js не загружен или функция checkCompatibility не определена');
-    } else {
-      console.log('script.js успешно загружен');
-    }
-    // Регистрация сервис-воркера
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(registration => {
-          console.log('ServiceWorker registration successful');
-        })
-        .catch(error => {
-          console.error('ServiceWorker registration failed:', error);
-        });
-    }
-  </script>
 </body>
 </html>
