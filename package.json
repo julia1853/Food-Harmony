@@ -4,11 +4,12 @@
   "description": "Food Harmony - приложение для проверки сочетаемости продуктов",
   "main": "index.html",
   "scripts": {
-    "start": "python -m http.server 3000",
+    "start": "http-server . -p 3000 -c-1",
+    "dev": "http-server . -p 3000 -c-1 --cors",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@sentry/browser": "^7.0.0"
+    "http-server": "^14.1.1"
   },
   "author": "",
   "license": "ISC"
